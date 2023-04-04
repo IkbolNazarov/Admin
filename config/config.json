@@ -1,0 +1,13 @@
+{
+    "localHost": {
+      "port": "8080",
+      "host": "localhost"
+    },
+    "dbConnection": {
+      "host": "localhost",
+      "port": "5432",
+      "user": "postgres",
+      "password": "1111",
+      "dbname": "db"
+    }
+  }
