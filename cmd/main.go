@@ -24,7 +24,7 @@ func main() {
 	newRepository := repository.NewRepository(DB)
 	newService := services.NewServices(newRepository)
 	newServer := server.NewHandler(route, newService)
- 
+
 	newServer.Init()
 
 	address := net.JoinHostPort(config.LocalHost.Host, config.LocalHost.Port)
