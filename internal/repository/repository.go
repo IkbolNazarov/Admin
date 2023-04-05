@@ -18,7 +18,7 @@ func NewRepository(conn *gorm.DB) *Repository {
 
 func (r *Repository) AddData(data *models.UserInfo) error {
 
-	conn := db.DataB.Table("user_info")
+	conn := db.DataB.Table(models.GetTableName())
 	tx := conn.Create(data)
 	if tx.Error != nil {
 		log.Println(tx.Error)
@@ -36,7 +36,7 @@ func (r *Repository) GetData(pagination *models.Pagination, l int64) ([]*models.
 		msg := result.Error
 		return nil, msg
 	}
-	amount := db.DataB.Table("user_info").Count(&l)
+	amount := db.DataB.Table(models.GetTableName()).Count(&l)
 	if amount.Error != nil {
 		return nil, amount.Error
 	}
@@ -44,7 +44,7 @@ func (r *Repository) GetData(pagination *models.Pagination, l int64) ([]*models.
 }
 
 func (r *Repository) CountRows(l int64) error {
-	amount := db.DataB.Table("user_info").Count(&l)
+	amount := db.DataB.Table(models.GetTableName()).Count(&l)
 	if amount.Error != nil {
 		return amount.Error
 	}
@@ -52,7 +52,7 @@ func (r *Repository) CountRows(l int64) error {
 }
 
 func (r *Repository) UpdateData(userData *models.UserInfo) error {
-	tx := db.DataB.Table("user_info").Model(&models.UserInfo{}).Where("id = ?", userData.Id).Updates(models.UserInfo{Name: userData.Name, Icon: userData.Icon, Sort: userData.Sort})
+	tx := db.DataB.Table(models.GetTableName()).Model(&models.UserInfo{}).Where("id = ?", userData.Id).Updates(models.UserInfo{Name: userData.Name, Icon: userData.Icon, Sort: userData.Sort})
 	if tx.Error != nil {
 		return tx.Error
 	}
@@ -61,7 +61,7 @@ func (r *Repository) UpdateData(userData *models.UserInfo) error {
 
 func (r *Repository) DeleteData(id int) error {
 	var data *models.UserInfo
-	query := db.DataB.Table("user_info").Where("id =?", id).Delete(&data) //TODO: уверен что работает?
+	query := db.DataB.Table(models.GetTableName()).Where("id =?", id).Delete(&data) //TODO: уверен что работает?
 	if query.Error != nil {
 		return query.Error //DONE
 	}

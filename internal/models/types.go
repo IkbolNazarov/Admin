@@ -29,7 +29,10 @@ type UserInfo struct {
 	Sort      int    `gorm:"column:sort"`
 }
 
-
+func GetTableName()(string){
+	tableName := "user_info"
+	return tableName
+}
 
 type Pagination struct {
 	Limit      int         `json:"limit,omitempty;query:limit"`

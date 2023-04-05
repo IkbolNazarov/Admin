@@ -15,7 +15,7 @@ import (
 )
 
 type Handler struct {
-	Engine *gin.Engine					//eсли правильно понял, то речь идет о сервисах, убрал
+	Engine     *gin.Engine            //eсли правильно понял, то речь идет о сервисах, убрал
 	Repository *repository.Repository //TODO: не используется и вообще не должен даже
 }
 
@@ -52,8 +52,8 @@ func (h *Handler) AddData(ctx *gin.Context) {
 }
 
 func (h *Handler) UploadImage(ctx *gin.Context) {
-	file, err := ctx.FormFile("image") 							//TODO: файл сам не грузится
-	if err != nil {												//проверил, сохраняется в ./pics/
+	file, err := ctx.FormFile("image") //TODO: файл сам не грузится
+	if err != nil {						//DONE
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
@@ -66,8 +66,13 @@ func (h *Handler) UploadImage(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
-	defer imageFile.Close()
 
+	err = ctx.SaveUploadedFile(file, imagePath)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+	defer imageFile.Close()
 	ctx.JSON(http.StatusOK, gin.H{"AddUser": file.Filename})
 }
 
