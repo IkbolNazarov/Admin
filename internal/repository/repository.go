@@ -39,12 +39,12 @@ func (r *Repository) GetData(pagination *models.Pagination) ([]*models.UserInfo,
 	return UserInfo, nil
 }
 
-func (r *Repository) CountRows(l int64) (int64, error) {
+func (r *Repository) CountRows(l int64) (error) {
 	amount := db.DataB.Table("user_info").Count(&l)
 	if amount.Error != nil {
-		return 0, amount.Error
+		return amount.Error
 	}
-	return l, nil
+	return nil
 }
 
 func (r *Repository) UpdateData(userData *models.UserInfo) error {
@@ -59,7 +59,7 @@ func (r *Repository) DeleteData(id int) error {
 	var data *models.UserInfo
 	query := db.DataB.Table("user_info").Where("id =?", id).Delete(&data) //TODO: уверен что работает?
 	if query.Error != nil {
-		return query.Error // DONE
+		return query.Error 	//DONE
 	}
 	return nil
 }

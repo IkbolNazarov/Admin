@@ -34,7 +34,7 @@ func (r *Handler) TotalPageUserInfo(limit int64) (int64, error) {
 	}
 
 	var length int64
-	_, err := r.Repository.CountRows(length) // TODO: если используешь репозитории почему запрос в бд тут
+	err := r.Repository.CountRows(length) // TODO: если используешь репозитории почему запрос в бд тут
 	if err != nil {							//Done
 		return 0, err
 	}
