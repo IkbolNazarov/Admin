@@ -27,19 +27,23 @@ func (r *Repository) AddData(data *models.UserInfo) error {
 	return nil
 }
 
-func (r *Repository) GetData(pagination *models.Pagination) ([]*models.UserInfo, error) {
+func (r *Repository) GetData(pagination *models.Pagination, l int64) ([]*models.UserInfo, error) {
 	var UserInfo []*models.UserInfo
 	offset := (pagination.Page - 1) * pagination.Limit
-	queryBuider := db.DataB.Table("user_info").Limit(pagination.Limit).Offset(offset)
+	queryBuider := db.DataB.Limit(pagination.Limit).Offset(offset)
 	result := queryBuider.Find(&UserInfo) //TODO: 2 раза моделька и еще table отдельно указанно
-	if result.Error != nil {              // убрал одну модельку, если table не указать, то вместо "user_info" будет искать "user_infos"
+	if result.Error != nil {              // DONE
 		msg := result.Error
 		return nil, msg
+	}
+	amount := db.DataB.Table("user_info").Count(&l)
+	if amount.Error != nil {
+		return nil, amount.Error
 	}
 	return UserInfo, nil
 }
 
-func (r *Repository) CountRows(l int64) (error) {
+func (r *Repository) CountRows(l int64) error {
 	amount := db.DataB.Table("user_info").Count(&l)
 	if amount.Error != nil {
 		return amount.Error
@@ -59,7 +63,7 @@ func (r *Repository) DeleteData(id int) error {
 	var data *models.UserInfo
 	query := db.DataB.Table("user_info").Where("id =?", id).Delete(&data) //TODO: уверен что работает?
 	if query.Error != nil {
-		return query.Error 	//DONE
+		return query.Error //DONE
 	}
 	return nil
 }

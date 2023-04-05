@@ -73,14 +73,15 @@ func (h *Handler) UploadImage(ctx *gin.Context) {
 
 func (h *Handler) GetData(ctx *gin.Context) {
 	pagination := GeneratePaginationFromRequest(ctx)
-	UserLists, err := h.Repository.GetData(&pagination)
+	var listLenght int64
+	UserLists, err := h.Repository.GetData(&pagination, listLenght)
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
 
-	TotalPages, err := h.TotalPageUserInfo(int64(pagination.Limit))
+	TotalPages, err := h.TotalPageUserInfo(int64(pagination.Limit), listLenght)
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err})

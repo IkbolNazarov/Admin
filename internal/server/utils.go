@@ -28,15 +28,9 @@ func GeneratePaginationFromRequest(c *gin.Context) models.Pagination {
 	}
 }
 
-func (r *Handler) TotalPageUserInfo(limit int64) (int64, error) {
+func (r *Handler) TotalPageUserInfo(limit int64, length int64) (int64, error) {
 	if limit == 0 {
 		limit = 10
-	}
-
-	var length int64
-	err := r.Repository.CountRows(length) // TODO: если используешь репозитории почему запрос в бд тут
-	if err != nil {							//Done
-		return 0, err
 	}
 
 	totalPage := length / limit
